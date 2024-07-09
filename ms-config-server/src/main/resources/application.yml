@@ -9,7 +9,7 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/noetipo/DAD-2024-1-G2.git # ruta del repositorio git
+          uri: https://github.com/deez14234234/DAD-2024-1-G2-EXAMEN.git # ruta del repositorio git
           searchPaths: config-data
           #username:
           #password:
