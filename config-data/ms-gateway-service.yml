@@ -1,5 +1,5 @@
 server:
-  port: 8087
+  port: 8080
 
 
 eureka:
@@ -37,9 +37,6 @@ spring:
           uri: lb://ms-alumno-service
           predicates:
             - Path=/alumno/**
-
-
-
         - id: ms-auth-service
           uri: lb://ms-auth-service
           predicates:
