@@ -1,7 +1,8 @@
 package denilson.mamani.upeu.msmatricula.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+
+import denilson.mamani.upeu.msmatricula.dto.AlumnoDto;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -14,6 +15,7 @@ public class Matricula {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String codigo_matricula;
-
-
+    private Integer alumnoId;
+    @Transient
+    private AlumnoDto alumnoDto;
 }

@@ -1,7 +1,9 @@
 package denilson.mamani.upeu.msmatricula.service.impl;
 
 
+import denilson.mamani.upeu.msmatricula.dto.AlumnoDto;
 import denilson.mamani.upeu.msmatricula.entity.Matricula;
+import denilson.mamani.upeu.msmatricula.feign.AlumnoFeign;
 import denilson.mamani.upeu.msmatricula.repository.MatriculaRespository;
 import denilson.mamani.upeu.msmatricula.service.MatriculaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +16,9 @@ import java.util.Optional;
 public class MatriculaServiceImpl implements MatriculaService {
     @Autowired
     private MatriculaRespository matriculaRespository;
-//    @Autowired
-//    private AlumnoFeign alumnoFeign;
+
+    @Autowired
+    private AlumnoFeign alumnoFeign;
 
     @Override
     public List<Matricula> listar() {
@@ -29,23 +32,16 @@ public class MatriculaServiceImpl implements MatriculaService {
 
     @Override
     public Optional<Matricula> buscarPorId(Integer id) {
-        return matriculaRespository.findById(id);
+        Optional<Matricula> matricula = matriculaRespository.findById(id);
+        if (matricula.isPresent()) {
+            Matricula m = matricula.get();
+            AlumnoDto alumnoDto = alumnoFeign.buscarPorId(m.getAlumnoId()).getBody();
+            m.setAlumnoDto(alumnoDto);
+            return Optional.of(m);
+        } else {
+            return Optional.empty();
+        }
     }
-//    public Optional<Matricula> buscarPorId(Integer id) {
-//        Optional<Matricula> pedido = matriculaRespository.findById(id);
-//        AlumnoDto clienteDto = AlumnoFeign.buscarPorId(pedido.get().getClienteId()).getBody();
-//       /* for (PedidoDetalle pedidoDetalle : pedido.get().getDetalle()) {
-//            pedidoDetalle.setProductoDto(catalogoFeign.productoBuscarPorId(pedidoDetalle.getProductoId()).getBody());
-//        }*/
-//
-//        List<PedidoDetalle> pedidoDetalles = pedido.get().getDetalle().stream().map(pedidoDetalle -> {
-//            pedidoDetalle.setProductoDto(catalogoFeign.productoBuscarPorId(pedidoDetalle.getProductoId()).getBody());
-//            return pedidoDetalle;
-//        }).toList();
-//        pedido.get().setClienteDto(clienteDto);
-//        pedido.get().setDetalle(pedidoDetalles);
-//        return pedidoRespository.findById(id);
-//    }
 
     @Override
     public Matricula actualizar(Matricula matricula) {
@@ -55,6 +51,5 @@ public class MatriculaServiceImpl implements MatriculaService {
     @Override
     public void eliminar(Integer id) {
         matriculaRespository.deleteById(id);
-
     }
 }
